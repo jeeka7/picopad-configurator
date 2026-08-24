@@ -3,165 +3,167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>PicoPad Configurator</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    body {
-        margin: 0;
-        font-family: system-ui, sans-serif;
-        background: #111;
-        color: #eee;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        padding: 30px 15px;
-    }
+body {
+    margin: 0;
+    padding: 30px 15px;
+    min-height: 100vh;
+    background: #111;
+    color: #eee;
+    font-family: system-ui, sans-serif;
+}
 
-    .app {
-        width: 100%;
-        max-width: 850px;
-    }
+.app {
+    width: 100%;
+    max-width: 850px;
+    margin: auto;
+}
 
-    h1 {
-        margin: 0;
-        font-size: 28px;
-    }
+h1 {
+    margin: 0;
+    font-size: 28px;
+}
 
-    .subtitle {
-        color: #888;
-        margin: 5px 0 25px;
-    }
+.subtitle {
+    color: #888;
+    margin: 5px 0 25px;
+}
 
-    .panel {
-        background: #1b1b1b;
-        border: 1px solid #333;
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 15px;
-    }
+.panel {
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
 
-    .profile-bar {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        flex-wrap: wrap;
-    }
+.profile-bar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
 
-    select,
-    input,
-    button {
-        font: inherit;
-    }
+select,
+input,
+button {
+    font: inherit;
+}
 
-    select,
-    input {
-        background: #111;
-        color: #eee;
-        border: 1px solid #444;
-        border-radius: 7px;
-        padding: 9px 12px;
-    }
+select,
+input {
+    background: #111;
+    color: #eee;
+    border: 1px solid #444;
+    border-radius: 7px;
+    padding: 9px 12px;
+}
 
-    button {
-        background: #292929;
-        color: white;
-        border: 1px solid #444;
-        border-radius: 7px;
-        padding: 9px 14px;
-        cursor: pointer;
-    }
+button {
+    background: #292929;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 7px;
+    padding: 9px 14px;
+    cursor: pointer;
+}
 
-    button:hover {
-        background: #383838;
-    }
+button:hover {
+    background: #383838;
+}
 
-    .pad {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-        max-width: 500px;
-        margin: 20px auto;
-    }
+.pad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 500px;
+    margin: 20px auto;
+}
 
+.key {
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    background: #242424;
+    border: 2px solid #444;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.key:hover {
+    border-color: #777;
+}
+
+.key.selected {
+    border-color: white;
+}
+
+.key-number {
+    font-size: 12px;
+    color: #777;
+}
+
+.key-label {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.editor {
+    display: grid;
+    gap: 12px;
+}
+
+.row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.row label {
+    width: 110px;
+    color: #aaa;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.status {
+    color: #8f8;
+    min-height: 20px;
+    margin-top: 10px;
+}
+
+.export-area {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
     .key {
-        min-height: 110px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 8px;
-        background: #242424;
-        border: 2px solid #444;
-        border-radius: 12px;
-        cursor: pointer;
-    }
-
-    .key:hover {
-        border-color: #777;
-    }
-
-    .key.selected {
-        border-color: #fff;
-    }
-
-    .key-number {
-        font-size: 12px;
-        color: #777;
+        min-height: 80px;
     }
 
     .key-label {
-        font-size: 18px;
-        font-weight: 600;
-        text-align: center;
+        font-size: 14px;
     }
-
-    .editor {
-        display: grid;
-        gap: 12px;
-    }
-
-    .row {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .row label {
-        width: 110px;
-        color: #aaa;
-    }
-
-    .actions {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 15px;
-    }
-
-    .danger {
-        border-color: #744;
-    }
-
-    .status {
-        color: #8f8;
-        min-height: 20px;
-        margin-top: 10px;
-    }
-
-    @media (max-width: 600px) {
-        .key {
-            min-height: 80px;
-        }
-
-        .key-label {
-            font-size: 14px;
-        }
-    }
+}
 </style>
 </head>
 
@@ -172,19 +174,29 @@
     <h1>🎛️ PicoPad Configurator</h1>
     <div class="subtitle">Fresh configuration tool</div>
 
+
+    <!-- PROFILES -->
+
     <div class="panel">
 
         <div class="profile-bar">
+
             <strong>Profile</strong>
 
             <select id="profileSelect"></select>
 
             <button onclick="newProfile()">＋ New</button>
+
             <button onclick="renameProfile()">Rename</button>
+
             <button onclick="deleteProfile()">Delete</button>
+
         </div>
 
     </div>
+
+
+    <!-- PAD -->
 
     <div class="panel">
 
@@ -194,6 +206,9 @@
 
     </div>
 
+
+    <!-- BUTTON EDITOR -->
+
     <div class="panel">
 
         <h2 id="selectedTitle">Select a button</h2>
@@ -201,71 +216,189 @@
         <div class="editor">
 
             <div class="row">
+
                 <label>Label</label>
-                <input id="labelInput" type="text" placeholder="Button name">
+
+                <input
+                    id="labelInput"
+                    type="text"
+                    placeholder="Button name"
+                >
+
             </div>
 
+
             <div class="row">
+
                 <label>Action</label>
 
                 <select id="actionType">
+
                     <option value="none">None</option>
-                    <option value="keypress">Keyboard Key</option>
-                    <option value="consumer">Media Button</option>
-                    <option value="text">Text</option>
-                    <option value="url">Open URL</option>
+
+                    <option value="keypress">
+                        Keyboard Key
+                    </option>
+
+                    <option value="consumer">
+                        Media Button
+                    </option>
+
+                    <option value="text">
+                        Text
+                    </option>
+
+                    <option value="url">
+                        Open URL
+                    </option>
+
                 </select>
+
             </div>
 
+
+            <!-- KEYBOARD -->
+
             <div class="row" id="keyRow">
+
                 <label>Key</label>
 
                 <select id="keyInput">
-                    <option value="LEFT_ARROW">Left Arrow</option>
-                    <option value="RIGHT_ARROW">Right Arrow</option>
-                    <option value="UP_ARROW">Up Arrow</option>
-                    <option value="DOWN_ARROW">Down Arrow</option>
-                    <option value="SPACE">Space</option>
-                    <option value="ENTER">Enter</option>
-                    <option value="ESCAPE">Escape</option>
-                    <option value="PAGE_UP">Page Up</option>
-                    <option value="PAGE_DOWN">Page Down</option>
-                    <option value="HOME">Home</option>
-                    <option value="END">End</option>
-                    <option value="F11">F11</option>
-                    <option value="CONTROL">Ctrl</option>
-                    <option value="ALT">Alt</option>
-                    <option value="SHIFT">Shift</option>
+
+                    <option value="LEFT_ARROW">
+                        Left Arrow
+                    </option>
+
+                    <option value="RIGHT_ARROW">
+                        Right Arrow
+                    </option>
+
+                    <option value="UP_ARROW">
+                        Up Arrow
+                    </option>
+
+                    <option value="DOWN_ARROW">
+                        Down Arrow
+                    </option>
+
+                    <option value="SPACE">
+                        Space
+                    </option>
+
+                    <option value="ENTER">
+                        Enter
+                    </option>
+
+                    <option value="ESCAPE">
+                        Escape
+                    </option>
+
+                    <option value="PAGE_UP">
+                        Page Up
+                    </option>
+
+                    <option value="PAGE_DOWN">
+                        Page Down
+                    </option>
+
+                    <option value="HOME">
+                        Home
+                    </option>
+
+                    <option value="END">
+                        End
+                    </option>
+
+                    <option value="F11">
+                        F11
+                    </option>
+
                 </select>
+
             </div>
 
+
+            <!-- MEDIA -->
+
             <div class="row" id="consumerRow">
+
                 <label>Media</label>
 
                 <select id="consumerInput">
-                    <option value="PLAY_PAUSE">Play / Pause</option>
-                    <option value="SCAN_NEXT_TRACK">Next</option>
-                    <option value="SCAN_PREVIOUS_TRACK">Previous</option>
-                    <option value="VOLUME_INCREMENT">Volume Up</option>
-                    <option value="VOLUME_DECREMENT">Volume Down</option>
-                    <option value="MUTE">Mute</option>
+
+                    <option value="PLAY_PAUSE">
+                        Play / Pause
+                    </option>
+
+                    <option value="SCAN_NEXT_TRACK">
+                        Next Track
+                    </option>
+
+                    <option value="SCAN_PREVIOUS_TRACK">
+                        Previous Track
+                    </option>
+
+                    <option value="VOLUME_INCREMENT">
+                        Volume Up
+                    </option>
+
+                    <option value="VOLUME_DECREMENT">
+                        Volume Down
+                    </option>
+
+                    <option value="MUTE">
+                        Mute
+                    </option>
+
                 </select>
+
             </div>
+
+
+            <!-- TEXT -->
 
             <div class="row" id="textRow">
+
                 <label>Text</label>
-                <input id="textInput" type="text" placeholder="Text to type">
+
+                <input
+                    id="textInput"
+                    type="text"
+                    placeholder="Text to type"
+                >
+
             </div>
+
+
+            <!-- URL -->
 
             <div class="row" id="urlRow">
+
                 <label>URL</label>
-                <input id="urlInput" type="text" placeholder="https://example.com">
+
+                <input
+                    id="urlInput"
+                    type="text"
+                    placeholder="https://example.com"
+                >
+
             </div>
 
+
+            <!-- BUTTON ACTIONS -->
+
             <div class="actions">
-                <button onclick="saveButton()">Save Button</button>
-                <button class="danger" onclick="clearButton()">Clear Button</button>
+
+                <button onclick="saveButton()">
+                    Save Button
+                </button>
+
+                <button onclick="clearButton()">
+                    Clear Button
+                </button>
+
             </div>
+
 
             <div class="status" id="status"></div>
 
@@ -273,302 +406,674 @@
 
     </div>
 
+
+    <!-- EXPORT -->
+
+    <div class="panel">
+
+        <h2>Configuration</h2>
+
+        <div class="export-area">
+
+            <button onclick="downloadConfig()">
+                ⬇️ Export Configuration
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
+
 
 <script>
 
+
+// ============================================================
+// DATA
+// ============================================================
+
 let profiles = {
+
     "Reading": {
+
         buttons: {}
+
     }
+
 };
 
 let currentProfile = "Reading";
+
 let selectedButton = 0;
 
-const buttonNames = [
-    "1", "2", "3",
-    "4", "5", "6",
-    "7", "8", "9"
-];
+
+// ============================================================
+// EMPTY BUTTON
+// ============================================================
 
 function makeEmptyButton() {
+
     return {
+
         label: "",
+
         type: "none",
+
         value: ""
+
     };
+
 }
 
+
+// ============================================================
+// MAKE SURE ALL 9 BUTTONS EXIST
+// ============================================================
+
 function ensureButtons(profile) {
+
     for (let i = 0; i < 9; i++) {
+
         if (!profile.buttons[i]) {
-            profile.buttons[i] = makeEmptyButton();
+
+            profile.buttons[i] =
+                makeEmptyButton();
+
         }
+
     }
+
 }
+
+
+// ============================================================
+// REFRESH EVERYTHING
+// ============================================================
 
 function refreshProfiles() {
 
-    const select = document.getElementById("profileSelect");
+    const select =
+        document.getElementById(
+            "profileSelect"
+        );
 
     select.innerHTML = "";
 
-    Object.keys(profiles).forEach(name => {
+    Object.keys(profiles).forEach(
+        name => {
 
-        const option = document.createElement("option");
+            const option =
+                document.createElement(
+                    "option"
+                );
 
-        option.value = name;
-        option.textContent = name;
+            option.value = name;
 
-        if (name === currentProfile) {
-            option.selected = true;
+            option.textContent = name;
+
+            if (
+                name === currentProfile
+            ) {
+
+                option.selected = true;
+
+            }
+
+            select.appendChild(option);
+
         }
+    );
 
-        select.appendChild(option);
-    });
 
-    ensureButtons(profiles[currentProfile]);
+    ensureButtons(
+        profiles[currentProfile]
+    );
+
 
     drawPad();
+
     loadSelectedButton();
+
 }
 
-document.getElementById("profileSelect").addEventListener("change", function() {
 
-    currentProfile = this.value;
+// ============================================================
+// PROFILE CHANGE
+// ============================================================
 
-    ensureButtons(profiles[currentProfile]);
+document
+    .getElementById("profileSelect")
+    .addEventListener(
+        "change",
+        function () {
 
-    drawPad();
-    loadSelectedButton();
+            currentProfile =
+                this.value;
 
-});
+            ensureButtons(
+                profiles[currentProfile]
+            );
+
+            drawPad();
+
+            loadSelectedButton();
+
+        }
+    );
+
+
+// ============================================================
+// DRAW PAD
+// ============================================================
 
 function drawPad() {
 
-    const pad = document.getElementById("pad");
+    const pad =
+        document.getElementById(
+            "pad"
+        );
 
     pad.innerHTML = "";
 
+
     for (let i = 0; i < 9; i++) {
 
-        const button = document.createElement("div");
+        const button =
+            document.createElement(
+                "div"
+            );
 
-        button.className = "key";
+        button.className =
+            "key";
 
-        if (i === selectedButton) {
-            button.classList.add("selected");
+
+        if (
+            i === selectedButton
+        ) {
+
+            button.classList.add(
+                "selected"
+            );
+
         }
 
-        const data = profiles[currentProfile].buttons[i];
+
+        const data =
+            profiles[currentProfile]
+                .buttons[i];
+
 
         button.innerHTML = `
-            <div class="key-number">${i + 1}</div>
+
+            <div class="key-number">
+                ${i + 1}
+            </div>
+
             <div class="key-label">
                 ${data.label || "Empty"}
             </div>
+
         `;
 
-        button.onclick = function() {
+
+        button.onclick = function () {
 
             selectedButton = i;
 
             drawPad();
+
             loadSelectedButton();
 
         };
 
+
         pad.appendChild(button);
+
     }
+
 }
+
+
+// ============================================================
+// LOAD SELECTED BUTTON
+// ============================================================
 
 function loadSelectedButton() {
 
-    const data = profiles[currentProfile].buttons[selectedButton];
+    const data =
+        profiles[currentProfile]
+            .buttons[selectedButton];
 
-    document.getElementById("selectedTitle").textContent =
+
+    document.getElementById(
+        "selectedTitle"
+    ).textContent =
         `Button ${selectedButton + 1}`;
 
-    document.getElementById("labelInput").value =
+
+    document.getElementById(
+        "labelInput"
+    ).value =
         data.label || "";
 
-    document.getElementById("actionType").value =
+
+    document.getElementById(
+        "actionType"
+    ).value =
         data.type || "none";
 
-    document.getElementById("keyInput").value =
-        data.value || "LEFT_ARROW";
 
-    document.getElementById("consumerInput").value =
-        data.value || "PLAY_PAUSE";
+    document.getElementById(
+        "keyInput"
+    ).value =
+        data.value ||
+        "LEFT_ARROW";
 
-    document.getElementById("textInput").value =
+
+    document.getElementById(
+        "consumerInput"
+    ).value =
+        data.value ||
+        "PLAY_PAUSE";
+
+
+    document.getElementById(
+        "textInput"
+    ).value =
         data.value || "";
 
-    document.getElementById("urlInput").value =
+
+    document.getElementById(
+        "urlInput"
+    ).value =
         data.value || "";
+
 
     updateFields();
+
 }
 
-document.getElementById("actionType").addEventListener(
-    "change",
-    updateFields
-);
+
+// ============================================================
+// SHOW / HIDE ACTION FIELDS
+// ============================================================
+
+document
+    .getElementById("actionType")
+    .addEventListener(
+        "change",
+        updateFields
+    );
+
 
 function updateFields() {
 
-    const type = document.getElementById("actionType").value;
+    const type =
+        document.getElementById(
+            "actionType"
+        ).value;
 
-    document.getElementById("keyRow").style.display =
-        type === "keypress" ? "flex" : "none";
 
-    document.getElementById("consumerRow").style.display =
-        type === "consumer" ? "flex" : "none";
+    document.getElementById(
+        "keyRow"
+    ).style.display =
+        type === "keypress"
+            ? "flex"
+            : "none";
 
-    document.getElementById("textRow").style.display =
-        type === "text" ? "flex" : "none";
 
-    document.getElementById("urlRow").style.display =
-        type === "url" ? "flex" : "none";
+    document.getElementById(
+        "consumerRow"
+    ).style.display =
+        type === "consumer"
+            ? "flex"
+            : "none";
+
+
+    document.getElementById(
+        "textRow"
+    ).style.display =
+        type === "text"
+            ? "flex"
+            : "none";
+
+
+    document.getElementById(
+        "urlRow"
+    ).style.display =
+        type === "url"
+            ? "flex"
+            : "none";
+
 }
+
+
+// ============================================================
+// SAVE BUTTON
+// ============================================================
 
 function saveButton() {
 
-    const type = document.getElementById("actionType").value;
+    const type =
+        document.getElementById(
+            "actionType"
+        ).value;
+
 
     let value = "";
 
+
     if (type === "keypress") {
-        value = document.getElementById("keyInput").value;
+
+        value =
+            document.getElementById(
+                "keyInput"
+            ).value;
+
     }
+
 
     if (type === "consumer") {
-        value = document.getElementById("consumerInput").value;
+
+        value =
+            document.getElementById(
+                "consumerInput"
+            ).value;
+
     }
+
 
     if (type === "text") {
-        value = document.getElementById("textInput").value;
+
+        value =
+            document.getElementById(
+                "textInput"
+            ).value;
+
     }
+
 
     if (type === "url") {
-        value = document.getElementById("urlInput").value;
+
+        value =
+            document.getElementById(
+                "urlInput"
+            ).value;
+
     }
 
-    profiles[currentProfile].buttons[selectedButton] = {
-        label: document.getElementById("labelInput").value,
-        type: type,
-        value: value
-    };
+
+    profiles[currentProfile]
+        .buttons[selectedButton] = {
+
+            label:
+                document.getElementById(
+                    "labelInput"
+                ).value,
+
+            type: type,
+
+            value: value
+
+        };
+
 
     drawPad();
 
-    document.getElementById("status").textContent =
+
+    document.getElementById(
+        "status"
+    ).textContent =
         "Button saved.";
 
 }
 
+
+// ============================================================
+// CLEAR BUTTON
+// ============================================================
+
 function clearButton() {
 
-    profiles[currentProfile].buttons[selectedButton] =
+    profiles[currentProfile]
+        .buttons[selectedButton] =
         makeEmptyButton();
 
+
     loadSelectedButton();
+
     drawPad();
 
-    document.getElementById("status").textContent =
+
+    document.getElementById(
+        "status"
+    ).textContent =
         "Button cleared.";
+
 }
+
+
+// ============================================================
+// NEW PROFILE
+// ============================================================
 
 function newProfile() {
 
-    let name = prompt("Profile name:");
+    const name =
+        prompt(
+            "Profile name:"
+        );
+
 
     if (!name) return;
 
+
     if (profiles[name]) {
-        alert("That profile already exists.");
+
+        alert(
+            "That profile already exists."
+        );
+
         return;
+
     }
 
+
     profiles[name] = {
+
         buttons: {}
+
     };
+
 
     currentProfile = name;
 
+
     refreshProfiles();
+
 }
+
+
+// ============================================================
+// RENAME PROFILE
+// ============================================================
 
 function renameProfile() {
 
-    const name = prompt(
-        "New profile name:",
-        currentProfile
-    );
+    const name =
+        prompt(
+            "New profile name:",
+            currentProfile
+        );
 
-    if (!name || name === currentProfile) return;
 
-    if (profiles[name]) {
-        alert("That profile already exists.");
+    if (
+        !name ||
+        name === currentProfile
+    ) {
+
         return;
+
     }
 
-    profiles[name] = profiles[currentProfile];
 
-    delete profiles[currentProfile];
+    if (profiles[name]) {
+
+        alert(
+            "That profile already exists."
+        );
+
+        return;
+
+    }
+
+
+    profiles[name] =
+        profiles[currentProfile];
+
+
+    delete profiles[
+        currentProfile
+    ];
+
 
     currentProfile = name;
 
+
     refreshProfiles();
+
 }
+
+
+// ============================================================
+// DELETE PROFILE
+// ============================================================
 
 function deleteProfile() {
 
-    const names = Object.keys(profiles);
+    const names =
+        Object.keys(profiles);
+
 
     if (names.length <= 1) {
-        alert("You need at least one profile.");
+
+        alert(
+            "You need at least one profile."
+        );
+
         return;
+
     }
 
-    if (!confirm(`Delete "${currentProfile}"?`)) {
+
+    if (
+        !confirm(
+            `Delete "${currentProfile}"?`
+        )
+    ) {
+
         return;
+
     }
 
-    delete profiles[currentProfile];
 
-    currentProfile = Object.keys(profiles)[0];
+    delete profiles[
+        currentProfile
+    ];
+
+
+    currentProfile =
+        Object.keys(profiles)[0];
+
 
     refreshProfiles();
+
 }
+
+
+// ============================================================
+// EXPORT CONFIGURATION
+// ============================================================
+
+function downloadConfig() {
+
+    const config = {
+
+        profiles: profiles,
+
+        active_profile:
+            currentProfile
+
+    };
+
+
+    const json =
+        JSON.stringify(
+            config,
+            null,
+            2
+        );
+
+
+    const blob =
+        new Blob(
+            [json],
+            {
+                type:
+                    "application/json"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href = url;
+
+    link.download =
+        "picopad-config.json";
+
+
+    document.body.appendChild(
+        link
+    );
+
+    link.click();
+
+    document.body.removeChild(
+        link
+    );
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+
+    document.getElementById(
+        "status"
+    ).textContent =
+        "Configuration exported.";
+
+}
+
+
+// ============================================================
+// START
+// ============================================================
 
 refreshProfiles();
 
-   function downloadConfig() {
-
-    const config = {
-        profiles: profiles,
-        active_profile: currentProfile
-    };
-
-    const blob = new Blob(
-        [JSON.stringify(config, null, 2)],
-        { type: "application/json" }
-    );
-
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "picopad-config.json";
-    a.click();
-
-    URL.revokeObjectURL(url);
-}
-
-<button onclick="downloadConfig()">⬇️ Export Configuration</button>
-   
 </script>
 
 </body>
