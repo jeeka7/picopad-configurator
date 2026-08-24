@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>PicoPad Configurator</title>
 
 <style>
@@ -44,7 +43,9 @@ h1 {
     margin-bottom: 15px;
 }
 
-.profile-bar {
+.profile-bar,
+.actions,
+.export-area {
     display: flex;
     gap: 10px;
     align-items: center;
@@ -136,23 +137,28 @@ button:hover {
     color: #aaa;
 }
 
-.actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 15px;
-}
-
 .status {
     color: #8f8;
     min-height: 20px;
     margin-top: 10px;
 }
 
-.export-area {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+input[type="file"] {
+    display: none;
+}
+
+.import-label {
+    display: inline-block;
+    background: #292929;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 7px;
+    padding: 9px 14px;
+    cursor: pointer;
+}
+
+.import-label:hover {
+    background: #383838;
 }
 
 @media (max-width: 600px) {
@@ -175,7 +181,7 @@ button:hover {
     <div class="subtitle">Fresh configuration tool</div>
 
 
-    <!-- PROFILES -->
+    <!-- PROFILE -->
 
     <div class="panel">
 
@@ -385,8 +391,6 @@ button:hover {
             </div>
 
 
-            <!-- BUTTON ACTIONS -->
-
             <div class="actions">
 
                 <button onclick="saveButton()">
@@ -399,7 +403,6 @@ button:hover {
 
             </div>
 
-
             <div class="status" id="status"></div>
 
         </div>
@@ -407,7 +410,7 @@ button:hover {
     </div>
 
 
-    <!-- EXPORT -->
+    <!-- IMPORT / EXPORT -->
 
     <div class="panel">
 
@@ -415,8 +418,21 @@ button:hover {
 
         <div class="export-area">
 
+            <label
+                for="fileInput"
+                class="import-label"
+            >
+                ⬆️ Import JSON
+            </label>
+
+            <input
+                id="fileInput"
+                type="file"
+                accept=".json,application/json"
+            >
+
             <button onclick="downloadConfig()">
-                ⬇️ Export Configuration
+                ⬇️ Export JSON
             </button>
 
         </div>
@@ -428,23 +444,17 @@ button:hover {
 
 <script>
 
-
 // ============================================================
 // DATA
 // ============================================================
 
 let profiles = {
-
     "Reading": {
-
         buttons: {}
-
     }
-
 };
 
 let currentProfile = "Reading";
-
 let selectedButton = 0;
 
 
@@ -455,31 +465,29 @@ let selectedButton = 0;
 function makeEmptyButton() {
 
     return {
-
         label: "",
-
         type: "none",
-
         value: ""
-
     };
 
 }
 
 
 // ============================================================
-// MAKE SURE ALL 9 BUTTONS EXIST
+// ENSURE 9 BUTTONS
 // ============================================================
 
 function ensureButtons(profile) {
 
+    if (!profile.buttons) {
+        profile.buttons = {};
+    }
+
     for (let i = 0; i < 9; i++) {
 
         if (!profile.buttons[i]) {
-
             profile.buttons[i] =
                 makeEmptyButton();
-
         }
 
     }
@@ -488,51 +496,42 @@ function ensureButtons(profile) {
 
 
 // ============================================================
-// REFRESH EVERYTHING
+// REFRESH
 // ============================================================
 
 function refreshProfiles() {
 
     const select =
-        document.getElementById(
-            "profileSelect"
-        );
+        document.getElementById("profileSelect");
 
     select.innerHTML = "";
 
-    Object.keys(profiles).forEach(
-        name => {
+    Object.keys(profiles).forEach(name => {
 
-            const option =
-                document.createElement(
-                    "option"
-                );
+        const option =
+            document.createElement("option");
 
-            option.value = name;
+        option.value = name;
+        option.textContent = name;
 
-            option.textContent = name;
-
-            if (
-                name === currentProfile
-            ) {
-
-                option.selected = true;
-
-            }
-
-            select.appendChild(option);
-
+        if (name === currentProfile) {
+            option.selected = true;
         }
-    );
 
+        select.appendChild(option);
+
+    });
+
+    if (!profiles[currentProfile]) {
+        currentProfile =
+            Object.keys(profiles)[0];
+    }
 
     ensureButtons(
         profiles[currentProfile]
     );
 
-
     drawPad();
-
     loadSelectedButton();
 
 }
@@ -544,23 +543,20 @@ function refreshProfiles() {
 
 document
     .getElementById("profileSelect")
-    .addEventListener(
-        "change",
-        function () {
+    .addEventListener("change", function() {
 
-            currentProfile =
-                this.value;
+        currentProfile = this.value;
 
-            ensureButtons(
-                profiles[currentProfile]
-            );
+        ensureButtons(
+            profiles[currentProfile]
+        );
 
-            drawPad();
+        selectedButton = 0;
 
-            loadSelectedButton();
+        drawPad();
+        loadSelectedButton();
 
-        }
-    );
+    });
 
 
 // ============================================================
@@ -570,42 +566,26 @@ document
 function drawPad() {
 
     const pad =
-        document.getElementById(
-            "pad"
-        );
+        document.getElementById("pad");
 
     pad.innerHTML = "";
-
 
     for (let i = 0; i < 9; i++) {
 
         const button =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
-        button.className =
-            "key";
+        button.className = "key";
 
-
-        if (
-            i === selectedButton
-        ) {
-
-            button.classList.add(
-                "selected"
-            );
-
+        if (i === selectedButton) {
+            button.classList.add("selected");
         }
-
 
         const data =
             profiles[currentProfile]
                 .buttons[i];
 
-
         button.innerHTML = `
-
             <div class="key-number">
                 ${i + 1}
             </div>
@@ -613,20 +593,16 @@ function drawPad() {
             <div class="key-label">
                 ${data.label || "Empty"}
             </div>
-
         `;
 
-
-        button.onclick = function () {
+        button.onclick = function() {
 
             selectedButton = i;
 
             drawPad();
-
             loadSelectedButton();
 
         };
-
 
         pad.appendChild(button);
 
@@ -636,7 +612,7 @@ function drawPad() {
 
 
 // ============================================================
-// LOAD SELECTED BUTTON
+// LOAD BUTTON
 // ============================================================
 
 function loadSelectedButton() {
@@ -645,50 +621,40 @@ function loadSelectedButton() {
         profiles[currentProfile]
             .buttons[selectedButton];
 
-
     document.getElementById(
         "selectedTitle"
     ).textContent =
         `Button ${selectedButton + 1}`;
-
 
     document.getElementById(
         "labelInput"
     ).value =
         data.label || "";
 
-
     document.getElementById(
         "actionType"
     ).value =
         data.type || "none";
 
-
     document.getElementById(
         "keyInput"
     ).value =
-        data.value ||
-        "LEFT_ARROW";
-
+        data.value || "LEFT_ARROW";
 
     document.getElementById(
         "consumerInput"
     ).value =
-        data.value ||
-        "PLAY_PAUSE";
-
+        data.value || "PLAY_PAUSE";
 
     document.getElementById(
         "textInput"
     ).value =
         data.value || "";
 
-
     document.getElementById(
         "urlInput"
     ).value =
         data.value || "";
-
 
     updateFields();
 
@@ -696,7 +662,7 @@ function loadSelectedButton() {
 
 
 // ============================================================
-// SHOW / HIDE ACTION FIELDS
+// SHOW / HIDE FIELDS
 // ============================================================
 
 document
@@ -714,14 +680,12 @@ function updateFields() {
             "actionType"
         ).value;
 
-
     document.getElementById(
         "keyRow"
     ).style.display =
         type === "keypress"
             ? "flex"
             : "none";
-
 
     document.getElementById(
         "consumerRow"
@@ -730,14 +694,12 @@ function updateFields() {
             ? "flex"
             : "none";
 
-
     document.getElementById(
         "textRow"
     ).style.display =
         type === "text"
             ? "flex"
             : "none";
-
 
     document.getElementById(
         "urlRow"
@@ -760,9 +722,7 @@ function saveButton() {
             "actionType"
         ).value;
 
-
     let value = "";
-
 
     if (type === "keypress") {
 
@@ -771,30 +731,21 @@ function saveButton() {
                 "keyInput"
             ).value;
 
-    }
-
-
-    if (type === "consumer") {
+    } else if (type === "consumer") {
 
         value =
             document.getElementById(
                 "consumerInput"
             ).value;
 
-    }
-
-
-    if (type === "text") {
+    } else if (type === "text") {
 
         value =
             document.getElementById(
                 "textInput"
             ).value;
 
-    }
-
-
-    if (type === "url") {
+    } else if (type === "url") {
 
         value =
             document.getElementById(
@@ -802,7 +753,6 @@ function saveButton() {
             ).value;
 
     }
-
 
     profiles[currentProfile]
         .buttons[selectedButton] = {
@@ -818,9 +768,7 @@ function saveButton() {
 
         };
 
-
     drawPad();
-
 
     document.getElementById(
         "status"
@@ -831,7 +779,7 @@ function saveButton() {
 
 
 // ============================================================
-// CLEAR BUTTON
+// CLEAR
 // ============================================================
 
 function clearButton() {
@@ -840,11 +788,8 @@ function clearButton() {
         .buttons[selectedButton] =
         makeEmptyButton();
 
-
     loadSelectedButton();
-
     drawPad();
-
 
     document.getElementById(
         "status"
@@ -861,13 +806,9 @@ function clearButton() {
 function newProfile() {
 
     const name =
-        prompt(
-            "Profile name:"
-        );
-
+        prompt("Profile name:");
 
     if (!name) return;
-
 
     if (profiles[name]) {
 
@@ -876,19 +817,14 @@ function newProfile() {
         );
 
         return;
-
     }
 
-
     profiles[name] = {
-
         buttons: {}
-
     };
 
-
     currentProfile = name;
-
+    selectedButton = 0;
 
     refreshProfiles();
 
@@ -907,16 +843,12 @@ function renameProfile() {
             currentProfile
         );
 
-
     if (
         !name ||
         name === currentProfile
     ) {
-
         return;
-
     }
-
 
     if (profiles[name]) {
 
@@ -925,21 +857,14 @@ function renameProfile() {
         );
 
         return;
-
     }
-
 
     profiles[name] =
         profiles[currentProfile];
 
-
-    delete profiles[
-        currentProfile
-    ];
-
+    delete profiles[currentProfile];
 
     currentProfile = name;
-
 
     refreshProfiles();
 
@@ -955,7 +880,6 @@ function deleteProfile() {
     const names =
         Object.keys(profiles);
 
-
     if (names.length <= 1) {
 
         alert(
@@ -963,29 +887,22 @@ function deleteProfile() {
         );
 
         return;
-
     }
-
 
     if (
         !confirm(
             `Delete "${currentProfile}"?`
         )
     ) {
-
         return;
-
     }
 
-
-    delete profiles[
-        currentProfile
-    ];
-
+    delete profiles[currentProfile];
 
     currentProfile =
         Object.keys(profiles)[0];
 
+    selectedButton = 0;
 
     refreshProfiles();
 
@@ -993,7 +910,7 @@ function deleteProfile() {
 
 
 // ============================================================
-// EXPORT CONFIGURATION
+// EXPORT
 // ============================================================
 
 function downloadConfig() {
@@ -1007,14 +924,12 @@ function downloadConfig() {
 
     };
 
-
     const json =
         JSON.stringify(
             config,
             null,
             2
         );
-
 
     const blob =
         new Blob(
@@ -1025,40 +940,24 @@ function downloadConfig() {
             }
         );
 
-
     const url =
-        URL.createObjectURL(
-            blob
-        );
-
+        URL.createObjectURL(blob);
 
     const link =
-        document.createElement(
-            "a"
-        );
-
+        document.createElement("a");
 
     link.href = url;
 
     link.download =
         "picopad-config.json";
 
-
-    document.body.appendChild(
-        link
-    );
+    document.body.appendChild(link);
 
     link.click();
 
-    document.body.removeChild(
-        link
-    );
+    document.body.removeChild(link);
 
-
-    URL.revokeObjectURL(
-        url
-    );
-
+    URL.revokeObjectURL(url);
 
     document.getElementById(
         "status"
@@ -1066,6 +965,93 @@ function downloadConfig() {
         "Configuration exported.";
 
 }
+
+
+// ============================================================
+// IMPORT
+// ============================================================
+
+document
+    .getElementById("fileInput")
+    .addEventListener(
+        "change",
+        function(event) {
+
+            const file =
+                event.target.files[0];
+
+            if (!file) return;
+
+            const reader =
+                new FileReader();
+
+            reader.onload =
+                function(e) {
+
+                    try {
+
+                        const imported =
+                            JSON.parse(
+                                e.target.result
+                            );
+
+                        if (
+                            !imported.profiles ||
+                            typeof imported.profiles !== "object"
+                        ) {
+
+                            throw new Error(
+                                "Invalid PicoPad configuration."
+                            );
+
+                        }
+
+                        profiles =
+                            imported.profiles;
+
+                        currentProfile =
+                            imported.active_profile ||
+                            Object.keys(profiles)[0];
+
+                        if (
+                            !profiles[currentProfile]
+                        ) {
+
+                            currentProfile =
+                                Object.keys(
+                                    profiles
+                                )[0];
+
+                        }
+
+                        selectedButton = 0;
+
+                        refreshProfiles();
+
+                        document.getElementById(
+                            "status"
+                        ).textContent =
+                            "Configuration imported.";
+
+                    }
+
+                    catch(error) {
+
+                        alert(
+                            "Could not import this JSON file.\n\n" +
+                            error.message
+                        );
+
+                    }
+
+                };
+
+            reader.readAsText(file);
+
+            event.target.value = "";
+
+        }
+    );
 
 
 // ============================================================
