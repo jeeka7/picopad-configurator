@@ -545,6 +545,30 @@ function deleteProfile() {
 
 refreshProfiles();
 
+   function downloadConfig() {
+
+    const config = {
+        profiles: profiles,
+        active_profile: currentProfile
+    };
+
+    const blob = new Blob(
+        [JSON.stringify(config, null, 2)],
+        { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "picopad-config.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+
+<button onclick="downloadConfig()">⬇️ Export Configuration</button>
+   
 </script>
 
 </body>
