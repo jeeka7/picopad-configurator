@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PicoPad Configurator</title>
 
 <style>
@@ -10,95 +10,101 @@
 
 body{
     margin:0;
-    padding:30px 15px;
     background:#111;
     color:#eee;
-    font-family:system-ui,sans-serif
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    padding:25px 15px
 }
 
 .app{
-    max-width:1000px;
+    max-width:1050px;
     margin:auto
 }
 
-h1{margin:0}
+h1{
+    margin:0;
+    font-size:28px
+}
 
 .subtitle{
     color:#888;
-    margin:5px 0 25px
+    margin:4px 0 22px
 }
 
 .panel{
     background:#1b1b1b;
     border:1px solid #333;
     border-radius:12px;
-    padding:20px;
+    padding:18px;
     margin-bottom:15px
 }
 
-.profile-bar{
+.profilebar{
     display:flex;
-    gap:10px;
     align-items:center;
+    gap:10px;
     flex-wrap:wrap
 }
 
-select,input,button{
+select,
+input,
+button{
     font:inherit
 }
 
-select,input{
+select,
+input{
     background:#111;
     color:#eee;
     border:1px solid #444;
     border-radius:7px;
-    padding:9px 12px
+    padding:9px 11px
 }
 
-button,.import-label{
+button,
+.import-label{
     background:#292929;
-    color:white;
+    color:#fff;
     border:1px solid #444;
     border-radius:7px;
-    padding:9px 14px;
-    cursor:pointer
+    padding:9px 13px;
+    cursor:pointer;
+    display:inline-block
 }
 
-button:hover,.import-label:hover{
+button:hover,
+.import-label:hover{
     background:#383838
 }
 
 .workspace{
     display:grid;
-    grid-template-columns:1.15fr 1fr;
+    grid-template-columns:1.05fr 1fr;
     gap:15px;
     align-items:start
-}
-
-.pad-panel{
-    min-height:100%
 }
 
 .pad{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:10px;
-    max-width:500px;
+    max-width:480px;
     margin:20px auto
 }
 
 .key{
-    min-height:110px;
+    min-height:115px;
+    background:#242424;
+    border:2px solid #444;
+    border-radius:12px;
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    gap:8px;
-    background:#242424;
-    border:2px solid #444;
-    border-radius:12px;
     cursor:pointer;
-    transition:.1s
+    transition:.12s;
+    padding:10px;
+    text-align:center
 }
 
 .key:hover{
@@ -106,66 +112,65 @@ button:hover,.import-label:hover{
 }
 
 .key.selected{
-    border-color:white
+    border-color:#fff
 }
 
-.key.special{
-    border-style:dashed
+.key.s4{
+    border-style:dashed;
+    cursor:default
 }
 
 .key-number{
+    color:#777;
     font-size:12px;
-    color:#777
+    margin-bottom:6px
 }
 
 .key-label{
-    font-size:18px;
+    font-size:16px;
     font-weight:600;
-    text-align:center;
-    word-break:break-word;
-    padding:0 5px
+    word-break:break-word
 }
 
 .editor{
     display:grid;
-    gap:12px
+    gap:13px
 }
 
 .row{
     display:flex;
     gap:10px;
-    align-items:center;
-    flex-wrap:wrap
+    align-items:center
 }
 
 .row label{
     width:90px;
-    color:#aaa
+    color:#aaa;
+    flex-shrink:0
 }
 
 .row input,
 .row select{
     flex:1;
-    min-width:160px
+    min-width:0
 }
 
 .actions{
     display:flex;
     gap:10px;
-    flex-wrap:wrap;
-    margin-top:5px
+    flex-wrap:wrap
 }
 
 .status{
-    color:#8f8;
     min-height:20px;
-    margin-top:5px
+    color:#8f8;
+    font-size:14px
 }
 
 .info{
-    color:#999;
-    font-size:14px;
-    margin-top:12px
+    color:#888;
+    font-size:13px;
+    margin-top:10px
 }
 
 .config-buttons{
@@ -178,22 +183,20 @@ input[type=file]{
     display:none
 }
 
-.import-label{
-    display:inline-block
+.empty{
+    color:#777;
+    text-align:center;
+    padding:30px 10px
 }
 
 @media(max-width:700px){
-
-    body{
-        padding:20px 10px
-    }
 
     .workspace{
         grid-template-columns:1fr
     }
 
     .key{
-        min-height:85px
+        min-height:90px
     }
 
     .key-label{
@@ -204,7 +207,6 @@ input[type=file]{
 </style>
 </head>
 
-
 <body>
 
 <div class="app">
@@ -212,15 +214,15 @@ input[type=file]{
 <h1>🎛️ PicoPad Configurator</h1>
 
 <div class="subtitle">
-Fresh configuration tool
+Edit PicoPad profiles and export a compatible macros.json
 </div>
 
 
-<!-- PROFILE CONTROLS -->
+<!-- PROFILE -->
 
 <div class="panel">
 
-<div class="profile-bar">
+<div class="profilebar">
 
 <strong>Profile</strong>
 
@@ -234,35 +236,21 @@ Fresh configuration tool
 
 </div>
 
-
-<div class="row" style="margin-top:15px">
-
-<label>Type</label>
-
-<select id="profileType">
-
-<option value="standard">Standard</option>
-
-<option value="numpad">Numpad</option>
-
-</select>
+<div class="info">
+S4 is fixed as Profile Switch and is not editable.
+</div>
 
 </div>
 
 
-<div class="info" id="profileInfo"></div>
-
-</div>
-
-
-<!-- MAIN WORKSPACE -->
+<!-- PAD + EDITOR -->
 
 <div class="workspace">
 
 
-<!-- LEFT: PAD -->
+<!-- PAD -->
 
-<div class="panel pad-panel">
+<div class="panel">
 
 <h2>Buttons</h2>
 
@@ -271,32 +259,17 @@ Fresh configuration tool
 </div>
 
 
-<!-- RIGHT: EDITOR + CONFIGURATION -->
+<!-- EDITOR -->
 
 <div>
 
-
-<!-- BUTTON EDITOR -->
-
 <div class="panel">
 
-<h2 id="selectedTitle">Select a button</h2>
+<h2 id="editorTitle">
+Select a button
+</h2>
 
-<div class="editor">
-
-
-<div class="row">
-
-<label>Label</label>
-
-<input
-id="labelInput"
-type="text"
-placeholder="Button name"
->
-
-</div>
-
+<div id="editor" class="editor">
 
 <div class="row">
 
@@ -318,8 +291,20 @@ Media Button
 Text
 </option>
 
+<option value="delay">
+Delay
+</option>
+
+<option value="launch">
+Launch
+</option>
+
 <option value="url">
-Open URL
+URL
+</option>
+
+<option value="profile_switch">
+Switch Profile
 </option>
 
 </select>
@@ -333,29 +318,62 @@ Open URL
 
 <select id="keyInput">
 
-<option value="LEFT_ARROW">Left Arrow</option>
-
-<option value="RIGHT_ARROW">Right Arrow</option>
-
-<option value="UP_ARROW">Up Arrow</option>
-
-<option value="DOWN_ARROW">Down Arrow</option>
+<option value="A">A</option>
+<option value="B">B</option>
+<option value="C">C</option>
+<option value="D">D</option>
+<option value="E">E</option>
+<option value="F">F</option>
+<option value="G">G</option>
+<option value="H">H</option>
+<option value="I">I</option>
+<option value="J">J</option>
+<option value="K">K</option>
+<option value="L">L</option>
+<option value="M">M</option>
+<option value="N">N</option>
+<option value="O">O</option>
+<option value="P">P</option>
+<option value="Q">Q</option>
+<option value="R">R</option>
+<option value="S">S</option>
+<option value="T">T</option>
+<option value="U">U</option>
+<option value="V">V</option>
+<option value="W">W</option>
+<option value="X">X</option>
+<option value="Y">Y</option>
+<option value="Z">Z</option>
 
 <option value="SPACE">Space</option>
-
 <option value="ENTER">Enter</option>
-
 <option value="ESCAPE">Escape</option>
+<option value="TAB">Tab</option>
 
+<option value="LEFT_ARROW">Left Arrow</option>
+<option value="RIGHT_ARROW">Right Arrow</option>
+<option value="UP_ARROW">Up Arrow</option>
+<option value="DOWN_ARROW">Down Arrow</option>
+
+<option value="BACKSPACE">Backspace</option>
+<option value="DELETE">Delete</option>
+<option value="HOME">Home</option>
+<option value="END">End</option>
 <option value="PAGE_UP">Page Up</option>
-
 <option value="PAGE_DOWN">Page Down</option>
 
-<option value="HOME">Home</option>
-
-<option value="END">End</option>
-
+<option value="F1">F1</option>
+<option value="F2">F2</option>
+<option value="F3">F3</option>
+<option value="F4">F4</option>
+<option value="F5">F5</option>
+<option value="F6">F6</option>
+<option value="F7">F7</option>
+<option value="F8">F8</option>
+<option value="F9">F9</option>
+<option value="F10">F10</option>
 <option value="F11">F11</option>
+<option value="F12">F12</option>
 
 </select>
 
@@ -368,29 +386,13 @@ Open URL
 
 <select id="consumerInput">
 
-<option value="PLAY_PAUSE">
-Play / Pause
-</option>
-
-<option value="SCAN_NEXT_TRACK">
-Next Track
-</option>
-
-<option value="SCAN_PREVIOUS_TRACK">
-Previous Track
-</option>
-
-<option value="VOLUME_INCREMENT">
-Volume Up
-</option>
-
-<option value="VOLUME_DECREMENT">
-Volume Down
-</option>
-
-<option value="MUTE">
-Mute
-</option>
+<option value="PLAY_PAUSE">Play / Pause</option>
+<option value="SCAN_NEXT_TRACK">Next Track</option>
+<option value="SCAN_PREVIOUS_TRACK">Previous Track</option>
+<option value="VOLUME_INCREMENT">Volume Up</option>
+<option value="VOLUME_DECREMENT">Volume Down</option>
+<option value="MUTE">Mute</option>
+<option value="STOP">Stop</option>
 
 </select>
 
@@ -410,6 +412,33 @@ placeholder="Text to type"
 </div>
 
 
+<div class="row" id="delayRow">
+
+<label>Delay</label>
+
+<input
+id="delayInput"
+type="number"
+min="0"
+placeholder="Milliseconds"
+>
+
+</div>
+
+
+<div class="row" id="launchRow">
+
+<label>Launch</label>
+
+<input
+id="launchInput"
+type="text"
+placeholder="Application or command"
+>
+
+</div>
+
+
 <div class="row" id="urlRow">
 
 <label>URL</label>
@@ -419,6 +448,15 @@ id="urlInput"
 type="text"
 placeholder="https://example.com"
 >
+
+</div>
+
+
+<div class="row" id="profileRow">
+
+<label>Profile</label>
+
+<select id="profileInput"></select>
 
 </div>
 
@@ -435,7 +473,6 @@ Clear Button
 
 </div>
 
-
 <div class="status" id="status"></div>
 
 </div>
@@ -443,7 +480,7 @@ Clear Button
 </div>
 
 
-<!-- CONFIGURATION -->
+<!-- IMPORT / EXPORT -->
 
 <div class="panel">
 
@@ -464,14 +501,17 @@ type="file"
 accept=".json,application/json"
 >
 
-<button onclick="downloadConfig()">
+<button onclick="exportJSON()">
 ⬇️ Export JSON
 </button>
 
 </div>
 
+<div class="info">
+Your configuration is automatically saved in this browser.
 </div>
 
+</div>
 
 </div>
 
@@ -482,124 +522,215 @@ accept=".json,application/json"
 
 <script>
 
+/* ============================================================
+   STORAGE
+============================================================ */
 
-/* =========================
-   DATA
-========================= */
+const STORAGE_KEY = "picopad_config_v1";
 
-let profiles={
 
-    "Reading":{
+/* ============================================================
+   DEFAULT CONFIG
+============================================================ */
 
-        type:"standard",
+const defaultConfig = {
 
-        buttons:{}
+    profiles: {
 
-    }
+        "Default": {
+
+            macros: []
+
+        }
+
+    },
+
+    active_profile: "Default"
 
 };
 
 
-let currentProfile="Reading";
+/* ============================================================
+   CONFIG
+============================================================ */
 
-let selectedButton=0;
+let config = loadLocalConfig();
 
+let currentProfile =
+    config.active_profile ||
+    Object.keys(config.profiles)[0];
 
-/* =========================
-   EMPTY BUTTON
-========================= */
-
-function makeEmptyButton(){
-
-    return{
-
-        label:"",
-
-        type:"none",
-
-        value:""
-
-    };
-
-}
+let selectedButton = 0;
 
 
-/* =========================
-   BUTTON COUNT
-========================= */
+/* ============================================================
+   LOAD LOCAL STORAGE
+============================================================ */
 
-function getButtonCount(profile){
+function loadLocalConfig(){
 
-    return profile.type==="numpad"
-        ? 10
-        : 9;
+    try{
 
-}
+        const saved =
+            localStorage.getItem(STORAGE_KEY);
 
+        if(saved){
 
-/* =========================
-   ENSURE BUTTONS
-========================= */
+            const parsed =
+                JSON.parse(saved);
 
-function ensureButtons(profile){
+            if(
+                parsed &&
+                parsed.profiles
+            ){
 
-    if(!profile.buttons){
+                return parsed;
 
-        profile.buttons={};
-
-    }
-
-
-    const count=getButtonCount(profile);
-
-
-    for(let i=0;i<count;i++){
-
-        if(!profile.buttons[i]){
-
-            profile.buttons[i]=makeEmptyButton();
+            }
 
         }
 
+    }catch(error){
+
+        console.error(
+            "Could not load saved configuration:",
+            error
+        );
+
     }
 
 
-    if(profile.type!=="numpad"){
+    return structuredClone(defaultConfig);
 
-        delete profile.buttons[9];
+}
+
+
+/* ============================================================
+   SAVE LOCAL STORAGE
+============================================================ */
+
+function saveLocal(){
+
+    try{
+
+        config.active_profile =
+            currentProfile;
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(config)
+        );
+
+    }catch(error){
+
+        console.error(
+            "Could not save configuration:",
+            error
+        );
 
     }
 
 }
 
 
-/* =========================
+/* ============================================================
+   PROFILE
+============================================================ */
+
+function getProfile(){
+
+    return config.profiles[currentProfile];
+
+}
+
+
+/* ============================================================
+   FIND MACRO
+============================================================ */
+
+function findMacro(row,col){
+
+    const profile =
+        getProfile();
+
+    if(!profile){
+
+        return null;
+
+    }
+
+
+    return (
+        profile.macros || []
+    ).find(
+        macro =>
+            Number(macro.row) === row &&
+            Number(macro.col) === col
+    ) || null;
+
+}
+
+
+/* ============================================================
+   FIND MACRO INDEX
+============================================================ */
+
+function findMacroIndex(row,col){
+
+    const profile =
+        getProfile();
+
+    if(!profile){
+
+        return -1;
+
+    }
+
+
+    return (
+        profile.macros || []
+    ).findIndex(
+        macro =>
+            Number(macro.row) === row &&
+            Number(macro.col) === col
+    );
+
+}
+
+
+/* ============================================================
    PROFILE LIST
-========================= */
+============================================================ */
 
 function refreshProfiles(){
 
-    const select=
-        document.getElementById("profileSelect");
+    const select =
+        document.getElementById(
+            "profileSelect"
+        );
 
 
-    select.innerHTML="";
+    select.innerHTML = "";
 
 
-    Object.keys(profiles).forEach(name=>{
+    Object.keys(
+        config.profiles
+    ).forEach(name => {
 
-        const option=
-            document.createElement("option");
+        const option =
+            document.createElement(
+                "option"
+            );
 
 
-        option.value=name;
+        option.value = name;
 
-        option.textContent=name;
+        option.textContent = name;
 
 
-        if(name===currentProfile){
+        if(name === currentProfile){
 
-            option.selected=true;
+            option.selected = true;
 
         }
 
@@ -609,38 +740,18 @@ function refreshProfiles(){
     });
 
 
-    if(!profiles[currentProfile]){
-
-        currentProfile=
-            Object.keys(profiles)[0];
-
-    }
-
-
-    ensureButtons(
-        profiles[currentProfile]
-    );
-
-
-    document.getElementById(
-        "profileType"
-    ).value=
-        profiles[currentProfile].type ||
-        "standard";
-
-
-    updateProfileInfo();
+    populateProfileActions();
 
     drawPad();
 
-    loadSelectedButton();
+    loadButton();
 
 }
 
 
-/* =========================
-   PROFILE CHANGE
-========================= */
+/* ============================================================
+   PROFILE SELECT
+============================================================ */
 
 document
 .getElementById("profileSelect")
@@ -648,13 +759,15 @@ document
     "change",
     function(){
 
-        currentProfile=this.value;
+        currentProfile =
+            this.value;
 
-        selectedButton=0;
+        config.active_profile =
+            currentProfile;
 
-        ensureButtons(
-            profiles[currentProfile]
-        );
+        selectedButton = 0;
+
+        saveLocal();
 
         refreshProfiles();
 
@@ -662,283 +775,381 @@ document
 );
 
 
-/* =========================
-   PROFILE TYPE
-========================= */
+/* ============================================================
+   PROFILE ACTION DROPDOWN
+============================================================ */
 
-document
-.getElementById("profileType")
-.addEventListener(
-    "change",
-    function(){
+function populateProfileActions(){
 
-        const profile=
-            profiles[currentProfile];
-
-
-        profile.type=this.value;
-
-        selectedButton=0;
-
-
-        ensureButtons(profile);
-
-
-        drawPad();
-
-        loadSelectedButton();
-
-        updateProfileInfo();
-
-
+    const select =
         document.getElementById(
-            "status"
-        ).textContent=
-            "Profile type changed.";
-
-    }
-);
-
-
-/* =========================
-   PROFILE INFO
-========================= */
-
-function updateProfileInfo(){
-
-    const profile=
-        profiles[currentProfile];
-
-
-    const info=
-        document.getElementById(
-            "profileInfo"
+            "profileInput"
         );
 
 
-    if(profile.type==="numpad"){
+    select.innerHTML = "";
 
-        info.textContent=
-            "10 configurable buttons. S4 becomes 0.";
 
-    }else{
+    Object.keys(
+        config.profiles
+    ).forEach(name => {
 
-        info.textContent=
-            "9 configurable buttons. S4 remains Profile Switch.";
+        const option =
+            document.createElement(
+                "option"
+            );
 
-    }
+        option.value = name;
+
+        option.textContent = name;
+
+        select.appendChild(option);
+
+    });
 
 }
 
 
-/* =========================
+/* ============================================================
    DRAW PAD
-========================= */
+============================================================ */
 
 function drawPad(){
 
-    const pad=
-        document.getElementById("pad");
+    const pad =
+        document.getElementById(
+            "pad"
+        );
 
 
-    pad.innerHTML="";
+    pad.innerHTML = "";
 
 
-    const profile=
-        profiles[currentProfile];
+    for(let i=0;i<9;i++){
+
+        const row =
+            Math.floor(i / 3);
+
+        const col =
+            i % 3;
 
 
-    const count=
-        getButtonCount(profile);
+        const macro =
+            findMacro(row,col);
 
 
-    for(let i=0;i<count;i++){
-
-        const button=
-            document.createElement("div");
-
-
-        button.className="key";
+        const key =
+            document.createElement(
+                "div"
+            );
 
 
-        if(i===selectedButton){
-
-            button.classList.add("selected");
-
-        }
+        key.className = "key";
 
 
-        const data=
-            profile.buttons[i] ||
-            makeEmptyButton();
+        if(i === selectedButton){
 
-
-        let number=i+1;
-
-        let label=
-            data.label ||
-            "Empty";
-
-
-        if(
-            profile.type==="numpad" &&
-            i===9
-        ){
-
-            number=0;
-
-            if(!data.label){
-
-                label="0";
-
-            }
-
-            button.classList.add("special");
+            key.classList.add(
+                "selected"
+            );
 
         }
 
 
-        button.innerHTML=`
+        let label =
+            getMacroLabel(macro);
+
+
+        key.innerHTML = `
 
             <div class="key-number">
-                ${number}
+                ${i + 1}
             </div>
 
             <div class="key-label">
-                ${label}
+                ${escapeHTML(label)}
             </div>
 
         `;
 
 
-        button.onclick=function(){
+        key.onclick = function(){
 
-            selectedButton=i;
+            selectedButton = i;
 
             drawPad();
 
-            loadSelectedButton();
+            loadButton();
 
         };
 
 
-        pad.appendChild(button);
+        pad.appendChild(key);
 
     }
 
 
-    /* Fixed S4 in standard mode */
+    /* Fixed S4 */
 
-    if(profile.type!=="numpad"){
-
-        const s4=
-            document.createElement("div");
-
-
-        s4.className=
-            "key special";
+    const s4 =
+        document.createElement(
+            "div"
+        );
 
 
-        s4.innerHTML=`
-
-            <div class="key-number">
-                S4
-            </div>
-
-            <div class="key-label">
-                Profile Switch
-            </div>
-
-        `;
+    s4.className =
+        "key s4";
 
 
-        pad.appendChild(s4);
+    s4.innerHTML = `
+
+        <div class="key-number">
+            S4
+        </div>
+
+        <div class="key-label">
+            Profile Switch
+        </div>
+
+    `;
+
+
+    pad.appendChild(s4);
+
+}
+
+
+/* ============================================================
+   MACRO LABEL
+============================================================ */
+
+function getMacroLabel(macro){
+
+    if(!macro){
+
+        return "Empty";
+
+    }
+
+
+    const actions =
+        macro.actions || [];
+
+
+    if(actions.length === 0){
+
+        return "Empty";
+
+    }
+
+
+    if(actions.length > 1){
+
+        return `${actions.length} actions`;
+
+    }
+
+
+    const action =
+        actions[0];
+
+
+    switch(action.type){
+
+        case "keypress":
+            return action.value || "Key";
+
+        case "consumer":
+            return mediaLabel(
+                action.value
+            );
+
+        case "text":
+            return action.value
+                ? `"${action.value}"`
+                : "Text";
+
+        case "delay":
+            return `${action.value} ms`;
+
+        case "launch":
+            return action.value || "Launch";
+
+        case "url":
+            return action.value || "URL";
+
+        case "profile_switch":
+            return action.value
+                ? `→ ${action.value}`
+                : "Profile";
+
+        default:
+            return action.type || "Action";
 
     }
 
 }
 
 
-/* =========================
-   LOAD SELECTED BUTTON
-========================= */
+/* ============================================================
+   MEDIA LABEL
+============================================================ */
 
-function loadSelectedButton(){
+function mediaLabel(value){
 
-    const profile=
-        profiles[currentProfile];
+    const labels = {
+
+        PLAY_PAUSE:"Play/Pause",
+
+        SCAN_NEXT_TRACK:"Next",
+
+        SCAN_PREVIOUS_TRACK:"Previous",
+
+        VOLUME_INCREMENT:"Volume +",
+
+        VOLUME_DECREMENT:"Volume -",
+
+        MUTE:"Mute",
+
+        STOP:"Stop"
+
+    };
 
 
-    const data=
-        profile.buttons[selectedButton];
+    return labels[value] || value || "Media";
+
+}
 
 
-    if(!data){
+/* ============================================================
+   LOAD BUTTON
+============================================================ */
+
+function loadButton(){
+
+    const title =
+        document.getElementById(
+            "editorTitle"
+        );
+
+
+    const macro =
+        findMacro(
+            Math.floor(
+                selectedButton / 3
+            ),
+            selectedButton % 3
+        );
+
+
+    title.textContent =
+        `Button ${selectedButton + 1}`;
+
+
+    clearEditor();
+
+
+    if(!macro){
+
+        updateFields();
 
         return;
 
     }
 
 
-    let title;
+    const actions =
+        macro.actions || [];
 
 
-    if(
-        profile.type==="numpad" &&
-        selectedButton===9
-    ){
+    if(actions.length === 0){
 
-        title="Button 0 (S4)";
+        updateFields();
 
-    }else{
-
-        title=
-            `Button ${selectedButton+1}`;
+        return;
 
     }
 
 
-    document.getElementById(
-        "selectedTitle"
-    ).textContent=title;
-
-
-    document.getElementById(
-        "labelInput"
-    ).value=
-        data.label || "";
+    const action =
+        actions[0];
 
 
     document.getElementById(
         "actionType"
-    ).value=
-        data.type || "none";
+    ).value =
+        action.type || "none";
 
 
-    document.getElementById(
-        "keyInput"
-    ).value=
-        data.value ||
-        "LEFT_ARROW";
+    const value =
+        action.value ?? "";
 
 
-    document.getElementById(
-        "consumerInput"
-    ).value=
-        data.value ||
-        "PLAY_PAUSE";
+    switch(action.type){
+
+        case "keypress":
+
+            document.getElementById(
+                "keyInput"
+            ).value = value;
+
+            break;
 
 
-    document.getElementById(
-        "textInput"
-    ).value=
-        data.value || "";
+        case "consumer":
+
+            document.getElementById(
+                "consumerInput"
+            ).value = value;
+
+            break;
 
 
-    document.getElementById(
-        "urlInput"
-    ).value=
-        data.value || "";
+        case "text":
+
+            document.getElementById(
+                "textInput"
+            ).value = value;
+
+            break;
+
+
+        case "delay":
+
+            document.getElementById(
+                "delayInput"
+            ).value = value;
+
+            break;
+
+
+        case "launch":
+
+            document.getElementById(
+                "launchInput"
+            ).value = value;
+
+            break;
+
+
+        case "url":
+
+            document.getElementById(
+                "urlInput"
+            ).value = value;
+
+            break;
+
+
+        case "profile_switch":
+
+            document.getElementById(
+                "profileInput"
+            ).value = value;
+
+            break;
+
+    }
 
 
     updateFields();
@@ -946,9 +1157,65 @@ function loadSelectedButton(){
 }
 
 
-/* =========================
+/* ============================================================
+   CLEAR EDITOR
+============================================================ */
+
+function clearEditor(){
+
+    document.getElementById(
+        "actionType"
+    ).value = "none";
+
+
+    document.getElementById(
+        "keyInput"
+    ).selectedIndex = 0;
+
+
+    document.getElementById(
+        "consumerInput"
+    ).selectedIndex = 0;
+
+
+    document.getElementById(
+        "textInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "delayInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "launchInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "urlInput"
+    ).value = "";
+
+
+    if(
+        document.getElementById(
+            "profileInput"
+        ).options.length
+    ){
+
+        document.getElementById(
+            "profileInput"
+        ).selectedIndex = 0;
+
+    }
+
+}
+
+
+/* ============================================================
    ACTION FIELDS
-========================= */
+============================================================ */
 
 document
 .getElementById("actionType")
@@ -960,7 +1227,7 @@ document
 
 function updateFields(){
 
-    const type=
+    const type =
         document.getElementById(
             "actionType"
         ).value;
@@ -968,151 +1235,315 @@ function updateFields(){
 
     document.getElementById(
         "keyRow"
-    ).style.display=
-        type==="keypress"
+    ).style.display =
+        type === "keypress"
         ? "flex"
         : "none";
 
 
     document.getElementById(
         "consumerRow"
-    ).style.display=
-        type==="consumer"
+    ).style.display =
+        type === "consumer"
         ? "flex"
         : "none";
 
 
     document.getElementById(
         "textRow"
-    ).style.display=
-        type==="text"
+    ).style.display =
+        type === "text"
+        ? "flex"
+        : "none";
+
+
+    document.getElementById(
+        "delayRow"
+    ).style.display =
+        type === "delay"
+        ? "flex"
+        : "none";
+
+
+    document.getElementById(
+        "launchRow"
+    ).style.display =
+        type === "launch"
         ? "flex"
         : "none";
 
 
     document.getElementById(
         "urlRow"
-    ).style.display=
-        type==="url"
+    ).style.display =
+        type === "url"
+        ? "flex"
+        : "none";
+
+
+    document.getElementById(
+        "profileRow"
+    ).style.display =
+        type === "profile_switch"
         ? "flex"
         : "none";
 
 }
 
 
-/* =========================
+/* ============================================================
    SAVE BUTTON
-========================= */
+============================================================ */
 
 function saveButton(){
 
-    const type=
+    const profile =
+        getProfile();
+
+
+    if(!profile){
+
+        return;
+
+    }
+
+
+    if(!profile.macros){
+
+        profile.macros = [];
+
+    }
+
+
+    const row =
+        Math.floor(
+            selectedButton / 3
+        );
+
+
+    const col =
+        selectedButton % 3;
+
+
+    const type =
         document.getElementById(
             "actionType"
         ).value;
 
 
-    let value="";
+    const index =
+        findMacroIndex(row,col);
 
 
-    if(type==="keypress"){
+    /* NONE = remove macro */
 
-        value=
-            document.getElementById(
-                "keyInput"
-            ).value;
+    if(type === "none"){
 
-    }
+        if(index !== -1){
 
+            profile.macros.splice(
+                index,
+                1
+            );
 
-    if(type==="consumer"){
-
-        value=
-            document.getElementById(
-                "consumerInput"
-            ).value;
-
-    }
+        }
 
 
-    if(type==="text"){
+        saveLocal();
 
-        value=
-            document.getElementById(
-                "textInput"
-            ).value;
+        drawPad();
+
+        setStatus(
+            "Button cleared."
+        );
+
+        return;
 
     }
 
 
-    if(type==="url"){
-
-        value=
-            document.getElementById(
-                "urlInput"
-            ).value;
-
-    }
+    let value = "";
 
 
-    profiles[currentProfile]
-        .buttons[selectedButton]={
+    switch(type){
 
-            label:
+        case "keypress":
+
+            value =
                 document.getElementById(
-                    "labelInput"
-                ).value,
+                    "keyInput"
+                ).value;
 
-            type:type,
+            break;
 
-            value:value
 
-        };
+        case "consumer":
 
+            value =
+                document.getElementById(
+                    "consumerInput"
+                ).value;
+
+            break;
+
+
+        case "text":
+
+            value =
+                document.getElementById(
+                    "textInput"
+                ).value;
+
+            break;
+
+
+        case "delay":
+
+            value =
+                document.getElementById(
+                    "delayInput"
+                ).value;
+
+            break;
+
+
+        case "launch":
+
+            value =
+                document.getElementById(
+                    "launchInput"
+                ).value;
+
+            break;
+
+
+        case "url":
+
+            value =
+                document.getElementById(
+                    "urlInput"
+                ).value;
+
+            break;
+
+
+        case "profile_switch":
+
+            value =
+                document.getElementById(
+                    "profileInput"
+                ).value;
+
+            break;
+
+    }
+
+
+    const newMacro = {
+
+        row: row,
+
+        col: col,
+
+        actions: [
+
+            {
+
+                type: type,
+
+                value: value
+
+            }
+
+        ]
+
+    };
+
+
+    if(index === -1){
+
+        profile.macros.push(
+            newMacro
+        );
+
+    }else{
+
+        profile.macros[index] =
+            newMacro;
+
+    }
+
+
+    saveLocal();
 
     drawPad();
 
+    loadButton();
 
-    document.getElementById(
-        "status"
-    ).textContent=
-        "Button saved.";
+    setStatus(
+        "Button saved."
+    );
 
 }
 
 
-/* =========================
+/* ============================================================
    CLEAR BUTTON
-========================= */
+============================================================ */
 
 function clearButton(){
 
-    profiles[currentProfile]
-        .buttons[selectedButton]=
-            makeEmptyButton();
+    const profile =
+        getProfile();
 
 
-    loadSelectedButton();
+    const row =
+        Math.floor(
+            selectedButton / 3
+        );
+
+
+    const col =
+        selectedButton % 3;
+
+
+    const index =
+        findMacroIndex(row,col);
+
+
+    if(index !== -1){
+
+        profile.macros.splice(
+            index,
+            1
+        );
+
+    }
+
+
+    saveLocal();
 
     drawPad();
 
+    loadButton();
 
-    document.getElementById(
-        "status"
-    ).textContent=
-        "Button cleared.";
+    setStatus(
+        "Button cleared."
+    );
 
 }
 
 
-/* =========================
+/* ============================================================
    NEW PROFILE
-========================= */
+============================================================ */
 
 function newProfile(){
 
-    const name=
-        prompt("Profile name:");
+    const name =
+        prompt(
+            "Profile name:"
+        );
 
 
     if(!name){
@@ -1122,7 +1553,7 @@ function newProfile(){
     }
 
 
-    if(profiles[name]){
+    if(config.profiles[name]){
 
         alert(
             "That profile already exists."
@@ -1133,43 +1564,35 @@ function newProfile(){
     }
 
 
-    const typeChoice=
-        confirm(
-            "Make this a Numpad profile?\n\n"+
-            "OK = Numpad (10 buttons)\n"+
-            "Cancel = Standard (9 buttons + S4)"
-        );
+    config.profiles[name] = {
 
-
-    profiles[name]={
-
-        type:
-            typeChoice
-            ? "numpad"
-            : "standard",
-
-        buttons:{}
+        macros: []
 
     };
 
 
-    currentProfile=name;
+    currentProfile = name;
 
-    selectedButton=0;
+    config.active_profile =
+        name;
 
+    selectedButton = 0;
+
+
+    saveLocal();
 
     refreshProfiles();
 
 }
 
 
-/* =========================
+/* ============================================================
    RENAME PROFILE
-========================= */
+============================================================ */
 
 function renameProfile(){
 
-    const name=
+    const name =
         prompt(
             "New profile name:",
             currentProfile
@@ -1178,7 +1601,7 @@ function renameProfile(){
 
     if(
         !name ||
-        name===currentProfile
+        name === currentProfile
     ){
 
         return;
@@ -1186,7 +1609,7 @@ function renameProfile(){
     }
 
 
-    if(profiles[name]){
+    if(config.profiles[name]){
 
         alert(
             "That profile already exists."
@@ -1197,30 +1620,42 @@ function renameProfile(){
     }
 
 
-    profiles[name]=
-        profiles[currentProfile];
+    config.profiles[name] =
+        config.profiles[
+            currentProfile
+        ];
 
 
-    delete profiles[currentProfile];
+    delete config.profiles[
+        currentProfile
+    ];
 
 
-    currentProfile=name;
+    currentProfile = name;
 
+    config.active_profile = name;
+
+
+    saveLocal();
 
     refreshProfiles();
 
 }
 
 
-/* =========================
+/* ============================================================
    DELETE PROFILE
-========================= */
+============================================================ */
 
 function deleteProfile(){
 
-    if(
-        Object.keys(profiles).length<=1
-    ){
+    const names =
+        Object.keys(
+            config.profiles
+        );
+
+
+    if(names.length <= 1){
 
         alert(
             "You need at least one profile."
@@ -1242,87 +1677,34 @@ function deleteProfile(){
     }
 
 
-    delete profiles[currentProfile];
+    delete config.profiles[
+        currentProfile
+    ];
 
 
-    currentProfile=
-        Object.keys(profiles)[0];
+    currentProfile =
+        Object.keys(
+            config.profiles
+        )[0];
 
 
-    selectedButton=0;
+    config.active_profile =
+        currentProfile;
 
+
+    selectedButton = 0;
+
+
+    saveLocal();
 
     refreshProfiles();
 
 }
 
 
-/* =========================
-   EXPORT
-========================= */
-
-function downloadConfig(){
-
-    const config={
-
-        profiles:profiles,
-
-        active_profile:currentProfile
-
-    };
-
-
-    const blob=
-        new Blob(
-            [
-                JSON.stringify(
-                    config,
-                    null,
-                    2
-                )
-            ],
-            {
-                type:
-                    "application/json"
-            }
-        );
-
-
-    const url=
-        URL.createObjectURL(blob);
-
-
-    const link=
-        document.createElement("a");
-
-
-    link.href=url;
-
-    link.download=
-        "picopad-config.json";
-
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-
-
-    URL.revokeObjectURL(url);
-
-
-    document.getElementById(
-        "status"
-    ).textContent=
-        "Configuration exported.";
-
-}
-
-
-/* =========================
-   IMPORT
-========================= */
+/* ============================================================
+   IMPORT JSON
+============================================================ */
 
 document
 .getElementById("fileInput")
@@ -1330,7 +1712,7 @@ document
     "change",
     function(event){
 
-        const file=
+        const file =
             event.target.files[0];
 
 
@@ -1341,101 +1723,236 @@ document
         }
 
 
-        const reader=
+        const reader =
             new FileReader();
 
 
-        reader.onload=function(e){
+        reader.onload =
+            function(e){
 
-            try{
+                try{
 
-                const imported=
-                    JSON.parse(
-                        e.target.result
-                    );
+                    const imported =
+                        JSON.parse(
+                            e.target.result
+                        );
 
 
-                if(!imported.profiles){
+                    if(
+                        !imported ||
+                        !imported.profiles
+                    ){
 
-                    throw new Error(
-                        "Invalid PicoPad configuration."
+                        throw new Error(
+                            "This is not a valid PicoPad macros.json."
+                        );
+
+                    }
+
+
+                    /* Keep the REAL PicoPad structure */
+
+                    config = imported;
+
+
+                    currentProfile =
+                        config.active_profile ||
+                        Object.keys(
+                            config.profiles
+                        )[0];
+
+
+                    if(
+                        !config.profiles[
+                            currentProfile
+                        ]
+                    ){
+
+                        currentProfile =
+                            Object.keys(
+                                config.profiles
+                            )[0];
+
+                        config.active_profile =
+                            currentProfile;
+
+                    }
+
+
+                    selectedButton = 0;
+
+
+                    saveLocal();
+
+                    refreshProfiles();
+
+
+                    setStatus(
+                        "PicoPad JSON imported and saved."
                     );
 
                 }
 
 
-                profiles=
-                    imported.profiles;
+                catch(error){
 
+                    alert(
+                        "Could not import JSON.\n\n" +
+                        error.message
+                    );
 
-                /* Compatibility with old profiles */
+                }
 
-                Object.keys(profiles)
-                    .forEach(name=>{
-
-                        if(
-                            !profiles[name].type
-                        ){
-
-                            profiles[name]
-                                .type=
-                                "standard";
-
-                        }
-
-
-                        ensureButtons(
-                            profiles[name]
-                        );
-
-                    });
-
-
-                currentProfile=
-                    imported.active_profile ||
-                    Object.keys(profiles)[0];
-
-
-                selectedButton=0;
-
-
-                refreshProfiles();
-
-
-                document.getElementById(
-                    "status"
-                ).textContent=
-                    "Configuration imported.";
-
-            }
-
-
-            catch(error){
-
-                alert(
-                    "Could not import this JSON file.\n\n"+
-                    error.message
-                );
-
-            }
-
-        };
+            };
 
 
         reader.readAsText(file);
 
-
-        event.target.value="";
+        event.target.value = "";
 
     }
 );
 
 
-/* =========================
+/* ============================================================
+   EXPORT JSON
+============================================================ */
+
+function exportJSON(){
+
+    config.active_profile =
+        currentProfile;
+
+
+    saveLocal();
+
+
+    const json =
+        JSON.stringify(
+            config,
+            null,
+            2
+        );
+
+
+    const blob =
+        new Blob(
+            [json],
+            {
+                type:
+                    "application/json"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href = url;
+
+    link.download =
+        "macros.json";
+
+
+    document.body.appendChild(
+        link
+    );
+
+    link.click();
+
+    document.body.removeChild(
+        link
+    );
+
+
+    URL.revokeObjectURL(url);
+
+
+    setStatus(
+        "macros.json exported."
+    );
+
+}
+
+
+/* ============================================================
+   STATUS
+============================================================ */
+
+function setStatus(message){
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    status.textContent =
+        message;
+
+
+    clearTimeout(
+        window.statusTimer
+    );
+
+
+    window.statusTimer =
+        setTimeout(
+            () => {
+                status.textContent = "";
+            },
+            2500
+        );
+
+}
+
+
+/* ============================================================
+   HTML ESCAPE
+============================================================ */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* ============================================================
    START
-========================= */
+============================================================ */
+
+if(!config.profiles ||
+   Object.keys(config.profiles).length === 0){
+
+    config =
+        structuredClone(
+            defaultConfig
+        );
+
+    currentProfile =
+        "Default";
+
+}
+
 
 refreshProfiles();
+
+updateFields();
 
 </script>
 
