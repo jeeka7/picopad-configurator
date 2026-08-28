@@ -4,74 +4,263 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PicoPad Configurator</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;padding:30px 15px;background:#111;color:#eee;font-family:system-ui,sans-serif}
-.app{max-width:850px;margin:auto}
-h1{margin:0}.subtitle{color:#888;margin:5px 0 25px}
-.panel{background:#1b1b1b;border:1px solid #333;border-radius:12px;padding:20px;margin-bottom:15px}
-.profile-bar,.actions,.export-area{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-select,input,button{font:inherit}
-select,input{background:#111;color:#eee;border:1px solid #444;border-radius:7px;padding:9px 12px}
-button,.import-label{background:#292929;color:white;border:1px solid #444;border-radius:7px;padding:9px 14px;cursor:pointer}
-button:hover,.import-label:hover{background:#383838}
-.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:500px;margin:20px auto}
-.key{min-height:110px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;background:#242424;border:2px solid #444;border-radius:12px;cursor:pointer}
-.key:hover{border-color:#777}.key.selected{border-color:white}
-.key-number{font-size:12px;color:#777}.key-label{font-size:18px;font-weight:600;text-align:center}
-.editor{display:grid;gap:12px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.row label{width:150px;color:#aaa}.status{color:#8f8;min-height:20px;margin-top:10px}
-input[type=file]{display:none}
-.import-label{display:inline-block}
-@media(max-width:600px){.key{min-height:80px}.key-label{font-size:14px}}
+
+body{
+    margin:0;
+    padding:30px 15px;
+    background:#111;
+    color:#eee;
+    font-family:system-ui,sans-serif
+}
+
+.app{
+    max-width:850px;
+    margin:auto
+}
+
+h1{margin:0}
+
+.subtitle{
+    color:#888;
+    margin:5px 0 25px
+}
+
+.panel{
+    background:#1b1b1b;
+    border:1px solid #333;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:15px
+}
+
+.profile-bar,
+.actions,
+.export-area{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap
+}
+
+select,input,button{
+    font:inherit
+}
+
+select,input{
+    background:#111;
+    color:#eee;
+    border:1px solid #444;
+    border-radius:7px;
+    padding:9px 12px
+}
+
+button,.import-label{
+    background:#292929;
+    color:white;
+    border:1px solid #444;
+    border-radius:7px;
+    padding:9px 14px;
+    cursor:pointer
+}
+
+button:hover,.import-label:hover{
+    background:#383838
+}
+
+.pad{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    max-width:500px;
+    margin:20px auto
+}
+
+.key{
+    min-height:110px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    background:#242424;
+    border:2px solid #444;
+    border-radius:12px;
+    cursor:pointer
+}
+
+.key:hover{
+    border-color:#777
+}
+
+.key.selected{
+    border-color:white
+}
+
+.key.special{
+    border-style:dashed;
+}
+
+.key-number{
+    font-size:12px;
+    color:#777
+}
+
+.key-label{
+    font-size:18px;
+    font-weight:600;
+    text-align:center
+}
+
+.editor{
+    display:grid;
+    gap:12px
+}
+
+.row{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap
+}
+
+.row label{
+    width:150px;
+    color:#aaa
+}
+
+.status{
+    color:#8f8;
+    min-height:20px;
+    margin-top:10px
+}
+
+.info{
+    color:#999;
+    font-size:14px;
+    margin-top:8px
+}
+
+input[type=file]{
+    display:none
+}
+
+.import-label{
+    display:inline-block
+}
+
+@media(max-width:600px){
+    .key{
+        min-height:80px
+    }
+
+    .key-label{
+        font-size:14px
+    }
+}
 </style>
 </head>
 
 <body>
+
 <div class="app">
 
 <h1>🎛️ PicoPad Configurator</h1>
 <div class="subtitle">Fresh configuration tool</div>
 
+
+<!-- PROFILE -->
+
 <div class="panel">
+
 <div class="profile-bar">
+
 <strong>Profile</strong>
+
 <select id="profileSelect"></select>
+
 <button onclick="newProfile()">＋ New</button>
 <button onclick="renameProfile()">Rename</button>
 <button onclick="deleteProfile()">Delete</button>
-</div>
+
 </div>
 
+<div class="row" style="margin-top:15px">
+
+<label>Profile Type</label>
+
+<select id="profileType">
+
+<option value="standard">Standard</option>
+<option value="numpad">Numpad</option>
+
+</select>
+
+</div>
+
+<div class="info" id="profileInfo"></div>
+
+</div>
+
+
+<!-- BUTTONS -->
+
 <div class="panel">
+
 <h2>Buttons</h2>
+
 <div class="pad" id="pad"></div>
+
 </div>
 
+
+<!-- EDITOR -->
+
 <div class="panel">
+
 <h2 id="selectedTitle">Select a button</h2>
 
 <div class="editor">
 
-<div class="row">
-<label>Label</label>
-<input id="labelInput" type="text" placeholder="Button name">
-</div>
 
 <div class="row">
+
+<label>Label</label>
+
+<input
+id="labelInput"
+type="text"
+placeholder="Button name"
+>
+
+</div>
+
+
+<div class="row">
+
 <label>Action</label>
+
 <select id="actionType">
+
 <option value="none">None</option>
 <option value="keypress">Keyboard Key</option>
 <option value="consumer">Media Button</option>
 <option value="text">Text</option>
 <option value="url">Open URL</option>
+
 </select>
+
 </div>
 
+
 <div class="row" id="keyRow">
+
 <label>Key</label>
+
 <select id="keyInput">
+
 <option value="LEFT_ARROW">Left Arrow</option>
 <option value="RIGHT_ARROW">Right Arrow</option>
 <option value="UP_ARROW">Up Arrow</option>
@@ -84,68 +273,75 @@ input[type=file]{display:none}
 <option value="HOME">Home</option>
 <option value="END">End</option>
 <option value="F11">F11</option>
+
 </select>
+
 </div>
 
+
 <div class="row" id="consumerRow">
+
 <label>Media</label>
+
 <select id="consumerInput">
+
 <option value="PLAY_PAUSE">Play / Pause</option>
 <option value="SCAN_NEXT_TRACK">Next Track</option>
 <option value="SCAN_PREVIOUS_TRACK">Previous Track</option>
 <option value="VOLUME_INCREMENT">Volume Up</option>
 <option value="VOLUME_DECREMENT">Volume Down</option>
 <option value="MUTE">Mute</option>
+
 </select>
+
 </div>
+
 
 <div class="row" id="textRow">
+
 <label>Text</label>
-<input id="textInput" type="text" placeholder="Text to type">
+
+<input
+id="textInput"
+type="text"
+placeholder="Text to type"
+>
+
 </div>
+
 
 <div class="row" id="urlRow">
+
 <label>URL</label>
-<input id="urlInput" type="text" placeholder="https://example.com">
+
+<input
+id="urlInput"
+type="text"
+placeholder="https://example.com"
+>
+
 </div>
+
 
 <div class="actions">
+
 <button onclick="saveButton()">Save Button</button>
 <button onclick="clearButton()">Clear Button</button>
+
 </div>
+
 
 <div class="status" id="status"></div>
-</div>
-</div>
-
-<!-- PROFILE SWITCH -->
-
-<div class="panel">
-<h2>Profile Switch</h2>
-
-<div class="row">
-<label>Switch Button</label>
-
-<select id="profileSwitch">
-<option value="s4">S4</option>
-<option value="0">Button 1</option>
-<option value="1">Button 2</option>
-<option value="2">Button 3</option>
-<option value="3">Button 4</option>
-<option value="4">Button 5</option>
-<option value="5">Button 6</option>
-<option value="6">Button 7</option>
-<option value="7">Button 8</option>
-<option value="8">Button 9</option>
-<option value="none">Disabled</option>
-</select>
 
 </div>
+
 </div>
+
 
 <!-- IMPORT / EXPORT -->
 
 <div class="panel">
+
 <h2>Configuration</h2>
 
 <div class="export-area">
@@ -154,47 +350,121 @@ input[type=file]{display:none}
 ⬆️ Import JSON
 </label>
 
-<input id="fileInput" type="file" accept=".json,application/json">
+<input
+id="fileInput"
+type="file"
+accept=".json,application/json"
+>
 
 <button onclick="downloadConfig()">⬇️ Export JSON</button>
 
 </div>
-</div>
 
 </div>
+
+
+</div>
+
 
 <script>
 
-let profiles={
-    "Reading":{buttons:{}}
+
+/* =========================
+   DATA
+========================= */
+
+
+let profiles = {
+
+    "Reading": {
+
+        type:"standard",
+
+        buttons:{}
+
+    }
+
 };
 
-let currentProfile="Reading";
-let selectedButton=0;
-let profileSwitch="s4";
+
+let currentProfile = "Reading";
+
+let selectedButton = 0;
+
+
+/* =========================
+   EMPTY BUTTON
+========================= */
+
 
 function makeEmptyButton(){
-    return{
+
+    return {
+
         label:"",
         type:"none",
         value:""
+
     };
+
 }
+
+
+/* =========================
+   BUTTON COUNT
+========================= */
+
+
+function getButtonCount(profile){
+
+    return profile.type === "numpad" ? 10 : 9;
+
+}
+
+
+/* =========================
+   ENSURE BUTTONS
+========================= */
+
 
 function ensureButtons(profile){
 
     if(!profile.buttons){
+
         profile.buttons={};
+
     }
 
-    for(let i=0;i<9;i++){
+
+    const count=getButtonCount(profile);
+
+
+    for(let i=0;i<count;i++){
 
         if(!profile.buttons[i]){
+
             profile.buttons[i]=makeEmptyButton();
+
         }
 
     }
+
+
+    /* Remove button 10 from standard profiles */
+
+    if(profile.type !== "numpad"){
+
+        delete profile.buttons[9];
+
+    }
+
 }
+
+
+/* =========================
+   PROFILE LIST
+========================= */
+
 
 function refreshProfiles(){
 
@@ -202,52 +472,128 @@ function refreshProfiles(){
 
     select.innerHTML="";
 
+
     Object.keys(profiles).forEach(name=>{
 
         const option=document.createElement("option");
 
         option.value=name;
+
         option.textContent=name;
 
         if(name===currentProfile){
+
             option.selected=true;
+
         }
 
         select.appendChild(option);
+
     });
 
+
     if(!profiles[currentProfile]){
+
         currentProfile=Object.keys(profiles)[0];
+
     }
+
 
     ensureButtons(profiles[currentProfile]);
 
-    document.getElementById("profileSwitch").value=profileSwitch;
+
+    document.getElementById("profileType").value =
+        profiles[currentProfile].type || "standard";
+
+
+    updateProfileInfo();
 
     drawPad();
+
     loadSelectedButton();
+
 }
 
-document.getElementById("profileSelect").addEventListener("change",function(){
+
+/* =========================
+   PROFILE CHANGE
+========================= */
+
+
+document
+.getElementById("profileSelect")
+.addEventListener("change",function(){
 
     currentProfile=this.value;
+
     selectedButton=0;
 
     ensureButtons(profiles[currentProfile]);
 
+    refreshProfiles();
+
+});
+
+
+/* =========================
+   PROFILE TYPE
+========================= */
+
+
+document
+.getElementById("profileType")
+.addEventListener("change",function(){
+
+    const profile=profiles[currentProfile];
+
+    profile.type=this.value;
+
+    selectedButton=0;
+
+    ensureButtons(profile);
+
     drawPad();
+
     loadSelectedButton();
 
-});
+    updateProfileInfo();
 
-document.getElementById("profileSwitch").addEventListener("change",function(){
-
-    profileSwitch=this.value;
-
-    document.getElementById("status").textContent=
-        "Profile switch setting changed.";
+    document.getElementById("status").textContent =
+        "Profile type changed.";
 
 });
+
+
+/* =========================
+   PROFILE INFO
+========================= */
+
+
+function updateProfileInfo(){
+
+    const profile=profiles[currentProfile];
+
+    const info=document.getElementById("profileInfo");
+
+    if(profile.type==="numpad"){
+
+        info.textContent =
+            "Numpad: 10 configurable buttons. S4 becomes button 0.";
+
+    }else{
+
+        info.textContent =
+            "Standard: 9 configurable buttons. S4 remains Profile Switch.";
+
+    }
+
+}
+
+
+/* =========================
+   DRAW PAD
+========================= */
+
 
 function drawPad(){
 
@@ -255,86 +601,201 @@ function drawPad(){
 
     pad.innerHTML="";
 
-    for(let i=0;i<9;i++){
+
+    const profile=profiles[currentProfile];
+
+    const count=getButtonCount(profile);
+
+
+    for(let i=0;i<count;i++){
 
         const button=document.createElement("div");
 
         button.className="key";
 
+
         if(i===selectedButton){
+
             button.classList.add("selected");
+
         }
 
-        const data=profiles[currentProfile].buttons[i];
+
+        const data=profile.buttons[i] || makeEmptyButton();
+
+
+        let number=i+1;
+
+        let label=data.label || "Empty";
+
+
+        /* Numpad S4 */
+
+        if(profile.type==="numpad" && i===9){
+
+            number=0;
+
+            if(!data.label){
+
+                label="0";
+
+            }
+
+            button.classList.add("special");
+
+        }
+
 
         button.innerHTML=`
-            <div class="key-number">${i+1}</div>
-            <div class="key-label">${data.label||"Empty"}</div>
+
+            <div class="key-number">${number}</div>
+
+            <div class="key-label">${label}</div>
+
         `;
+
 
         button.onclick=function(){
 
             selectedButton=i;
 
             drawPad();
+
             loadSelectedButton();
 
         };
 
+
         pad.appendChild(button);
+
     }
+
+
+    /* Standard mode gets a fixed S4 indicator */
+
+    if(profile.type!=="numpad"){
+
+        const s4=document.createElement("div");
+
+        s4.className="key special";
+
+        s4.innerHTML=`
+
+            <div class="key-number">S4</div>
+
+            <div class="key-label">Profile Switch</div>
+
+        `;
+
+        pad.appendChild(s4);
+
+    }
+
 }
+
+
+/* =========================
+   LOAD BUTTON
+========================= */
+
 
 function loadSelectedButton(){
 
-    const data=
-        profiles[currentProfile].buttons[selectedButton];
+    const profile=profiles[currentProfile];
 
-    document.getElementById("selectedTitle").textContent=
-        `Button ${selectedButton+1}`;
+    const data=profile.buttons[selectedButton];
 
-    document.getElementById("labelInput").value=
-        data.label||"";
 
-    document.getElementById("actionType").value=
-        data.type||"none";
+    if(!data){
 
-    document.getElementById("keyInput").value=
-        data.value||"LEFT_ARROW";
+        return;
 
-    document.getElementById("consumerInput").value=
-        data.value||"PLAY_PAUSE";
+    }
 
-    document.getElementById("textInput").value=
-        data.value||"";
 
-    document.getElementById("urlInput").value=
-        data.value||"";
+    let title;
+
+
+    if(profile.type==="numpad" && selectedButton===9){
+
+        title="Button 0 (S4)";
+
+    }else{
+
+        title=`Button ${selectedButton+1}`;
+
+    }
+
+
+    document.getElementById("selectedTitle").textContent=title;
+
+
+    document.getElementById("labelInput").value =
+        data.label || "";
+
+
+    document.getElementById("actionType").value =
+        data.type || "none";
+
+
+    document.getElementById("keyInput").value =
+        data.value || "LEFT_ARROW";
+
+
+    document.getElementById("consumerInput").value =
+        data.value || "PLAY_PAUSE";
+
+
+    document.getElementById("textInput").value =
+        data.value || "";
+
+
+    document.getElementById("urlInput").value =
+        data.value || "";
+
 
     updateFields();
+
 }
 
-document.getElementById("actionType").addEventListener(
-    "change",
-    updateFields
-);
+
+/* =========================
+   ACTION FIELDS
+========================= */
+
+
+document
+.getElementById("actionType")
+.addEventListener("change",updateFields);
+
 
 function updateFields(){
 
     const type=document.getElementById("actionType").value;
 
-    document.getElementById("keyRow").style.display=
-        type==="keypress"?"flex":"none";
 
-    document.getElementById("consumerRow").style.display=
-        type==="consumer"?"flex":"none";
+    document.getElementById("keyRow").style.display =
+        type==="keypress" ? "flex" : "none";
 
-    document.getElementById("textRow").style.display=
-        type==="text"?"flex":"none";
 
-    document.getElementById("urlRow").style.display=
-        type==="url"?"flex":"none";
+    document.getElementById("consumerRow").style.display =
+        type==="consumer" ? "flex" : "none";
+
+
+    document.getElementById("textRow").style.display =
+        type==="text" ? "flex" : "none";
+
+
+    document.getElementById("urlRow").style.display =
+        type==="url" ? "flex" : "none";
+
 }
+
+
+/* =========================
+   SAVE BUTTON
+========================= */
+
 
 function saveButton(){
 
@@ -342,62 +803,130 @@ function saveButton(){
 
     let value="";
 
+
     if(type==="keypress"){
+
         value=document.getElementById("keyInput").value;
+
     }
+
 
     if(type==="consumer"){
+
         value=document.getElementById("consumerInput").value;
+
     }
+
 
     if(type==="text"){
+
         value=document.getElementById("textInput").value;
+
     }
+
 
     if(type==="url"){
+
         value=document.getElementById("urlInput").value;
+
     }
 
+
     profiles[currentProfile].buttons[selectedButton]={
+
         label:document.getElementById("labelInput").value,
+
         type:type,
+
         value:value
+
     };
+
 
     drawPad();
 
-    document.getElementById("status").textContent="Button saved.";
+
+    document.getElementById("status").textContent =
+        "Button saved.";
+
 }
+
+
+/* =========================
+   CLEAR BUTTON
+========================= */
+
 
 function clearButton(){
 
     profiles[currentProfile].buttons[selectedButton]=
         makeEmptyButton();
 
+
     loadSelectedButton();
+
     drawPad();
 
-    document.getElementById("status").textContent="Button cleared.";
+
+    document.getElementById("status").textContent =
+        "Button cleared.";
+
 }
+
+
+/* =========================
+   NEW PROFILE
+========================= */
+
 
 function newProfile(){
 
     const name=prompt("Profile name:");
 
-    if(!name)return;
+    if(!name){
 
-    if(profiles[name]){
-        alert("That profile already exists.");
         return;
+
     }
 
-    profiles[name]={buttons:{}};
+
+    if(profiles[name]){
+
+        alert("That profile already exists.");
+
+        return;
+
+    }
+
+
+    const typeChoice=confirm(
+        "Make this a Numpad profile?\n\nOK = Numpad (10 buttons)\nCancel = Standard (9 buttons + S4 profile switch)"
+    );
+
+
+    profiles[name]={
+
+        type:typeChoice ? "numpad" : "standard",
+
+        buttons:{}
+
+    };
+
 
     currentProfile=name;
+
     selectedButton=0;
 
+
     refreshProfiles();
+
 }
+
+
+/* =========================
+   RENAME PROFILE
+========================= */
+
 
 function renameProfile(){
 
@@ -406,124 +935,220 @@ function renameProfile(){
         currentProfile
     );
 
-    if(!name||name===currentProfile)return;
+
+    if(!name || name===currentProfile){
+
+        return;
+
+    }
+
 
     if(profiles[name]){
+
         alert("That profile already exists.");
+
         return;
+
     }
+
 
     profiles[name]=profiles[currentProfile];
 
     delete profiles[currentProfile];
 
+
     currentProfile=name;
 
+
     refreshProfiles();
+
 }
+
+
+/* =========================
+   DELETE PROFILE
+========================= */
+
 
 function deleteProfile(){
 
     if(Object.keys(profiles).length<=1){
+
         alert("You need at least one profile.");
+
         return;
+
     }
 
+
     if(!confirm(`Delete "${currentProfile}"?`)){
+
         return;
+
     }
+
 
     delete profiles[currentProfile];
 
+
     currentProfile=Object.keys(profiles)[0];
+
     selectedButton=0;
 
+
     refreshProfiles();
+
 }
+
+
+/* =========================
+   EXPORT
+========================= */
+
 
 function downloadConfig(){
 
     const config={
+
         profiles:profiles,
-        active_profile:currentProfile,
-        profile_switch:profileSwitch
+
+        active_profile:currentProfile
+
     };
 
+
     const blob=new Blob(
+
         [JSON.stringify(config,null,2)],
+
         {type:"application/json"}
+
     );
 
+
     const url=URL.createObjectURL(blob);
+
 
     const link=document.createElement("a");
 
     link.href=url;
+
     link.download="picopad-config.json";
 
+
     document.body.appendChild(link);
+
     link.click();
+
     document.body.removeChild(link);
+
 
     URL.revokeObjectURL(url);
 
-    document.getElementById("status").textContent=
+
+    document.getElementById("status").textContent =
         "Configuration exported.";
+
 }
 
-document.getElementById("fileInput").addEventListener(
-    "change",
-    function(event){
 
-        const file=event.target.files[0];
+/* =========================
+   IMPORT
+========================= */
 
-        if(!file)return;
 
-        const reader=new FileReader();
+document
+.getElementById("fileInput")
+.addEventListener("change",function(event){
 
-        reader.onload=function(e){
+    const file=event.target.files[0];
 
-            try{
 
-                const imported=JSON.parse(e.target.result);
+    if(!file){
 
-                if(!imported.profiles){
-                    throw new Error(
-                        "Invalid PicoPad configuration."
-                    );
+        return;
+
+    }
+
+
+    const reader=new FileReader();
+
+
+    reader.onload=function(e){
+
+        try{
+
+            const imported=JSON.parse(e.target.result);
+
+
+            if(!imported.profiles){
+
+                throw new Error(
+                    "Invalid PicoPad configuration."
+                );
+
+            }
+
+
+            profiles=imported.profiles;
+
+
+            /* Compatibility with old profiles */
+
+            Object.keys(profiles).forEach(name=>{
+
+                if(!profiles[name].type){
+
+                    profiles[name].type="standard";
+
                 }
 
-                profiles=imported.profiles;
+                ensureButtons(profiles[name]);
 
-                currentProfile=
-                    imported.active_profile||
-                    Object.keys(profiles)[0];
+            });
 
-                profileSwitch=
-                    imported.profile_switch||
-                    "s4";
 
-                selectedButton=0;
+            currentProfile =
+                imported.active_profile ||
+                Object.keys(profiles)[0];
 
-                refreshProfiles();
 
-                document.getElementById("status").textContent=
-                    "Configuration imported.";
+            selectedButton=0;
 
-            }catch(error){
 
-                alert(
-                    "Could not import this JSON file.\n\n"+
-                    error.message
-                );
-            }
-        };
+            refreshProfiles();
 
-        reader.readAsText(file);
 
-        event.target.value="";
-    }
-);
+            document.getElementById("status").textContent =
+                "Configuration imported.";
+
+        }
+
+
+        catch(error){
+
+            alert(
+                "Could not import this JSON file.\n\n"+
+                error.message
+            );
+
+        }
+
+    };
+
+
+    reader.readAsText(file);
+
+
+    event.target.value="";
+
+});
+
+
+/* =========================
+   START
+========================= */
+
 
 refreshProfiles();
 
